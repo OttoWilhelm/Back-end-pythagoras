@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pythagorase kalkulaator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+  <h1>Pythagorase kalkulaator</h1>
+  <form id="calculatorForm">
+    <label for="sideA">Kaatet A:</label>
+    <input type="number" id="sideA" required>
+
+    <label for="sideB">Kaatet B:</label>
+    <input type="number" id="sideB" required>
+
+    <button type="submit">Arvuta</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('calculatorForm');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const sideA = parseFloat(document.getElementById('sideA').value);
+      const sideB = parseFloat(document.getElementById('sideB').value);
+
+      const response = await fetch('/calculate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ sideA, sideB })
+      });
+
+      const result = await response.json();
+      resultDiv.innerHTML = `Hüpotenuusi pikkus on: ${result.hypotenuse.toFixed(2)}`;
+    });
+  </script>
+</body>
+</html>
